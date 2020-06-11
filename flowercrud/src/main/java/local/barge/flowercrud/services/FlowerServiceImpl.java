@@ -1,6 +1,7 @@
 package local.barge.flowercrud.services;
 
 import local.barge.flowercrud.models.Flower;
+import local.barge.flowercrud.models.Supplier;
 import local.barge.flowercrud.repositories.FlowerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,16 @@ public class FlowerServiceImpl implements FlowerService {
 
     @Transactional
     @Override
+    public void delete(long id) {
+        if (flowerRepository.findById(id).isPresent()) {
+            flowerRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Flower " + id + " Not Found");
+        }
+    }
+
+    @Transactional
+    @Override
     public Flower save(Flower flower) {
         Flower newFlower = new Flower();
 
@@ -61,5 +72,29 @@ public class FlowerServiceImpl implements FlowerService {
         newFlower.setSupplier(flower.getSupplier());
 
         return flowerRepository.save(newFlower);
+    }
+    
+    @Transactional
+    @Override
+    public Flower update(Flower flower, long id) {
+        Flower currentFlower = flowerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Flower " + id + " Not Found"));
+        
+        if (flower.getType() != null) {
+            currentFlower.setType(flower.getType());
+        }
+        
+        if (flower.priceValueExists) {
+            currentFlower.setPrice(flower.getPrice());
+        }
+
+        if (flower.getSupplier() != null) {
+//             Supplier s = flower.getSupplier();
+//             Supplier newSupplier = new Supplier(s.getName(), s.getAddress(), s.getPhonenumber(), s.getFlowers());
+//             currentFlower.setSupplier(newSupplier);
+            currentFlower.setSupplier(flower.getSupplier());
+        }
+
+        return flowerRepository.save(currentFlower);
     }
 }
