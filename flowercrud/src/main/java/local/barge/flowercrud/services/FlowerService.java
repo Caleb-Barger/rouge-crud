@@ -12,4 +12,6 @@ public interface FlowerService {
 
     Flower findFlowerByType(String name);
 
+    Flower save(Flower flower);
+
 }

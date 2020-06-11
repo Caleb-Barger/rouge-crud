@@ -43,4 +43,23 @@ public class FlowerServiceImpl implements FlowerService {
 
         return flower;
     }
+
+    @Transactional
+    @Override
+    public Flower save(Flower flower) {
+        Flower newFlower = new Flower();
+
+        if (flower.getFlowerid() != 0) {
+            flowerRepository.findById(flower.getFlowerid())
+                    .orElseThrow(() -> new EntityNotFoundException("Flower " + flower.getFlowerid() + " Not Found"));
+
+            newFlower.setFlowerid(flower.getFlowerid());
+        }
+
+        newFlower.setType(flower.getType());
+        newFlower.setPrice(flower.getPrice());
+        newFlower.setSupplier(flower.getSupplier());
+
+        return flowerRepository.save(newFlower);
+    }
 }
