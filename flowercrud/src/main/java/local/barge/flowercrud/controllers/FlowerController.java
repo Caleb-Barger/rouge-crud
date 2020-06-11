@@ -26,7 +26,7 @@ public class FlowerController {
         return new ResponseEntity<>(flowers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/flowers/{flowerid}", produces = {"application/json"})
+    @GetMapping(value = "/flower/{flowerid}", produces = {"application/json"})
     public ResponseEntity<?> getFlowerById(@PathVariable Long flowerid) {
         Flower flower = flowerService.findFlowerById(flowerid);
         return new ResponseEntity<>(flower, HttpStatus.OK);
@@ -48,5 +48,27 @@ public class FlowerController {
         responseHeaders.setLocation(newFlowerURI);
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value="/flower/{flowerid}", consumes = {"application/json"})
+    public ResponseEntity<?> updateFullFlower (@Valid @RequestBody Flower updateFlower, @PathVariable long flowerid) {
+        updateFlower.setFlowerid(flowerid);
+        flowerService.save(updateFlower);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/flower/{flowerid}", consumes = {"application/json"})
+    public ResponseEntity<?> updateFlower(@RequestBody Flower updateFlower, @PathVariable long flowerid) {
+        flowerService.update(updateFlower, flowerid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
+    @DeleteMapping("/flower/{flowerid}")
+    public ResponseEntity<?> deleteFlowerById(@PathVariable Long flowerid) {
+        flowerService.delete(flowerid);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

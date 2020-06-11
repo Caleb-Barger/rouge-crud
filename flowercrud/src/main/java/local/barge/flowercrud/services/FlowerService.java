@@ -12,6 +12,10 @@ public interface FlowerService {
 
     Flower findFlowerByType(String name);
 
+    void delete(long id);
+
     Flower save(Flower flower);
+
+    Flower update(Flower flower, long id);
 
 }

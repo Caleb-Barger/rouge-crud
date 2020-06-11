@@ -15,6 +15,9 @@ public class Flower {
     private String type;
     private double price;
 
+    @Transient
+    public boolean priceValueExists = false;
+
     @ManyToOne
     @JoinColumn(name = "supplierid",
             nullable = false)
@@ -47,11 +50,11 @@ public class Flower {
         this.type = type;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    public double getPrice() { return price; }
 
     public void setPrice(double price) {
+
+        priceValueExists = true;
         this.price = price;
     }
 
